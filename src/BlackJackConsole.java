@@ -41,6 +41,8 @@ public class BlackJackConsole {
 		} else {
 			System.out.println("Draw !");
 		}
+		
+		sc.close();
 	}
 	
 	
