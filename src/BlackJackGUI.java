@@ -2,11 +2,10 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.FileNotFoundException;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import javafx.scene.layout.Border;
 
@@ -40,15 +39,31 @@ public class BlackJackGUI {
 		centerPanel.setLayout(new GridLayout(2, 1));
 		centerPanel.add(bankPanel);
 		centerPanel.add(playerPanel);
+
+		try{
+			addToPanel(playerPanel, "CLUB_j".toLowerCase());
+		} catch(FileNotFoundException ex) {
+			System.out.println(ex.getMessage());
+		}
 		
 		frame.add(topPanel, BorderLayout.NORTH);
 		frame.add(centerPanel, BorderLayout.CENTER);
 		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		frame.pack();
 		frame.setVisible(true);
+
+
 		
+	}
+
+	private void addToPanel(JPanel p, String token) throws FileNotFoundException{
+		File file = new File("./img/card_" + token + ".gif");
+		System.out.println(file.getPath());
+		ImageIcon icon = new ImageIcon(file.getPath()); // Create the image from the filename
+		JLabel label = new JLabel(icon); // Associate the image to a label
+		p.add(label); // Add the label to a panel
 	}
 	
 	public static void main(String[] args) {
