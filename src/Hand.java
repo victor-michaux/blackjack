@@ -45,4 +45,8 @@ public class Hand {
 		}
 		return (max == (int) 0) ? defaut : max;
 	}
+
+	public List<Card> getCardList() {
+		return new LinkedList<Card>(this.cardList);
+	}
 }

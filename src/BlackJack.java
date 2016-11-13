@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class BlackJack {
 	private Deck deck;
 	private Hand playerHand;
@@ -22,6 +24,7 @@ public class BlackJack {
 		this.bankHand.clear();
 		this.bankHand.add(this.deck.draw());
 		for(int i = 0; i < 2; i++) this.playerHand.add(this.deck.draw());
+		gameFinished = false;
 	}
 	
 	public String getPlayerHandString() {
@@ -75,5 +78,13 @@ public class BlackJack {
 			}
 			gameFinished = true;
 		}
+	}
+
+	public List<Card> getPlayerCardList() {
+		return this.playerHand.getCardList();
+	}
+
+	public List<Card> getBankCardList() {
+		return this.bankHand.getCardList();
 	}
 }
