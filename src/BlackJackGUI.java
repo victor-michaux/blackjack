@@ -47,12 +47,11 @@ public class BlackJackGUI {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					blackJack.playerDrawAnotherCard();
-					System.out.println(blackJack.getPlayerHandString());
-					updatePlayerPanel();
 					if(blackJack.isGameFinished()) {
 						anotherCard.setEnabled(false);
 						noMoreCard.setEnabled(false);
 					}
+					updatePlayerPanel();
 				} catch(EmptyDeckException exception) {
 					JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					System.exit(-1);
@@ -67,11 +66,13 @@ public class BlackJackGUI {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					blackJack.bankLastTurn();
-					updateBankPanel();
 					if(blackJack.isGameFinished()) {
 						anotherCard.setEnabled(false);
 						noMoreCard.setEnabled(false);
 					}
+					
+					updateBankPanel();
+					updatePlayerPanel();
 				} catch(EmptyDeckException exception) {
 					JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					System.exit(-1);
@@ -136,19 +137,40 @@ public class BlackJackGUI {
 
 	private void updatePlayerPanel()throws FileNotFoundException {
 		this.playerPanel.removeAll();
-		for(Card card: this.blackJack.getPlayerCardList()) {
-			String token = card.getColorSymbole() + "_" + card.getValueSymbole();
-			addToPanel(this.playerPanel, token.toLowerCase());
+		if(this.blackJack.getPlayerBest() == 21) {
+			addToPanel(this.playerPanel, "blackjack");
+		} else {
+			for(Card card: this.blackJack.getPlayerCardList()) {
+				String token = card.getColorSymbole() + "_" + card.getValueSymbole();
+				addToPanel(this.playerPanel, token.toLowerCase());
+			}
 		}
 		this.playerPanel.add(new JLabel("Player Best : " + this.blackJack.getPlayerBest()));
+		if(this.blackJack.isGameFinished()) {
+			if(this.blackJack.isPlayerWinner()) {
+				addToPanel(this.playerPanel, "winner");
+				addToPanel(this.bankPanel, "loser");
+			} else if(blackJack.isBankWinner()) {
+				addToPanel(this.bankPanel, "winner");
+				addToPanel(this.playerPanel, "loser");
+			} else {
+				addToPanel(this.playerPanel, "draw");
+				addToPanel(this.bankPanel, "draw");
+			}
+		}
+		
 		this.playerPanel.updateUI();
 	}
 
 	private void updateBankPanel()throws FileNotFoundException {
 		this.bankPanel.removeAll();
-		for(Card card: this.blackJack.getBankCardList()) {
-			String token = card.getColorSymbole() + "_" + card.getValueSymbole();
-			addToPanel(this.bankPanel, token.toLowerCase());
+		if(this.blackJack.getBankBest() == 21) {
+			addToPanel(this.bankPanel, "blackjack");
+		} else {
+			for(Card card: this.blackJack.getBankCardList()) {
+				String token = card.getColorSymbole() + "_" + card.getValueSymbole();
+				addToPanel(this.bankPanel, token.toLowerCase());
+			}
 		}
 		this.bankPanel.add(new JLabel("Bank Best : " + this.blackJack.getBankBest()));
 		this.bankPanel.updateUI();
